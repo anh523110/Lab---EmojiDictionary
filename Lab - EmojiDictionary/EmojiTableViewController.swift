@@ -10,9 +10,15 @@ import UIKit
 
 class EmojiTableViewController: UITableViewController {
 
+    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
+        let tableViewEditingMode = tableView.isEditing
+        tableView.setEditing(!tableViewEditingMode, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.leftBarButtonItem = editButtonItem
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -43,11 +49,35 @@ class EmojiTableViewController: UITableViewController {
         
         cell.textLabel?.text = "\(emoji.symbol) - \(emoji.name)"
         cell.detailTextLabel?.text = emoji.description
+        cell.showsReorderControl=true
 
         return cell
     }
     
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt
+    indexPath: IndexPath) {
+        let emoji = emojis[indexPath.row]
+        print("\(emoji.symbol) \(indexPath)")
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt
+    fromIndexPath: IndexPath, to: IndexPath) {
+        let movedEmoji = emojis.remove(at: fromIndexPath.row)
+        emojis.insert(movedEmoji, at: to.row)
+        tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView,
+    editingStyleForRowAt indexPath: IndexPath) ->
+    UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
