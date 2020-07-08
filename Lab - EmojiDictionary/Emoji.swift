@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 struct Emoji {
     var symbol: String
     var name: String
