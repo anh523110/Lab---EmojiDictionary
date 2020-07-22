@@ -15,10 +15,33 @@ class EmojiTableViewController: UITableViewController {
         tableView.setEditing(!tableViewEditingMode, animated: true)
     }
     
+    @IBAction func unwindToEmojiTableView(segue: UIStoryboardSegue){
+        guard segue.identifier == "saveUnwind",
+                let sourceViewController = segue.source as?
+                AddEditEmojiTableViewController,
+                let emoji = sourceViewController.emoji else { return }
+        
+            if let selectedIndexPath = tableView.indexPathForSelectedRow
+            {
+                emojis[selectedIndexPath.row] = emoji
+                tableView.reloadRows(at: [selectedIndexPath],
+                with: .none)
+            } else {
+                let newIndexPath = IndexPath(row: emojis.count,
+                section: 0)
+                emojis.append(emoji)
+                tableView.insertRows(at: [newIndexPath],
+                with: .automatic)
+            }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.leftBarButtonItem = editButtonItem
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44.0
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
